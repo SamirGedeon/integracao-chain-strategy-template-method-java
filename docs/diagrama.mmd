@@ -1,0 +1,22 @@
+classDiagram
+ class Pedido { +int protocolo +TipoPedido tipo +double pesoKg +String resultado }
+ class ProcessadorPedido { <<abstract>> -ProcessadorPedido proximo +definirProximo(ProcessadorPedido) +processar(Pedido,EstrategiaFrete) +executarFluxo(Pedido,EstrategiaFrete) #aceita(Pedido)* #separar(Pedido)* #enviar(Pedido,EstrategiaFrete) }
+ class ProcessadorEletronicos
+ class ProcessadorVestuario
+ class ProcessadorGeral
+ class EstrategiaFrete { <<interface>> +calcular(Pedido) double +nome() String }
+ class FreteEconomico
+ class FreteExpresso
+ class FreteRetirada
+ class Main
+ ProcessadorPedido <|-- ProcessadorEletronicos
+ ProcessadorPedido <|-- ProcessadorVestuario
+ ProcessadorPedido <|-- ProcessadorGeral
+ ProcessadorPedido o--> ProcessadorPedido : próximo handler
+ EstrategiaFrete <|.. FreteEconomico
+ EstrategiaFrete <|.. FreteExpresso
+ EstrategiaFrete <|.. FreteRetirada
+ ProcessadorPedido --> EstrategiaFrete : Strategy
+ ProcessadorPedido --> Pedido : Template Method
+ Main --> ProcessadorPedido : inicia cadeia
+ Main --> EstrategiaFrete : escolhe política
